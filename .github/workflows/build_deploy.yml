@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+permissions:
+  pages: write
+  id-token: write
+  contents: read
 
 jobs:
   # Build job
@@ -28,8 +32,6 @@ jobs:
 
   # Deployment job
   deploy:
-    permissions:
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
