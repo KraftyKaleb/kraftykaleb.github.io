@@ -1,0 +1,4 @@
+section { padding: 3rem 0; }
+section h3 { margin: 0 0 1rem; font-size: 1.5rem; color: #e6edf6; }
+section p { color: #c5d0df; }
+.contact-links { display: flex; gap: .75rem; flex-wrap: wrap; }

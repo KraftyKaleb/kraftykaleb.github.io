@@ -1,0 +1,236 @@
+:host {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    color: #e6edf6;
+    min-height: 100dvh;
+}
+
+main {
+    padding: 0 10rem;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: white;
+}
+
+.resume:hover::after {
+    display: none;
+}
+
+.logo-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    text-decoration: unset;
+
+    &:hover {
+        .photo-wrapper {
+            box-shadow: #0ea5e9 0 0 12px 0;
+        }
+
+        .logo-text {
+            text-shadow: #0ea5e9 0 0 5px;
+        }
+    }
+
+    .photo-wrapper {
+        height: 2.5rem;
+        width: 2.5rem;
+        overflow: hidden;
+        border-radius: 50%;
+        transition: box-shadow 0.15s ease-in-out, width 0.15s ease-in-out;
+
+        .headshot {
+            width: 2.5rem;
+            transition: width 0.15s ease-in-out;
+        }
+    }
+
+    .logo-text {
+        transition: font-size 0.15s ease-in-out, text-shadow 0.15s ease-in-out;
+        color: #fff;
+
+        .logo-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .logo-title {
+            font-size: 0.8rem;
+        }
+
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.site-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(11, 18, 32, 0.7);
+    border-bottom: 1px solid #1b2538;
+    z-index: 10;
+}
+
+.site-header .container {
+    display: flex;
+  align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1rem;
+}
+
+.logo {
+  display: flex;
+  flex-grow: 0;
+    font-size: 1.125rem;
+    margin: 0;
+    color: #e6edf6;
+}
+
+.topbar-nav {
+    text-decoration: none;
+    color: #c5d0df;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    .button-group {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+
+        .nav-button {
+            flex: 0 1 auto;
+        }
+    }
+}
+
+nav .nav-button:hover, nav .nav-button.active {
+    opacity: 1;
+    color: #ffffff;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .6rem 1rem;
+    border-radius: .5rem;
+    border: 1px solid #24314a;
+    text-decoration: none;
+    color: #e6edf6;
+    background: #0b1220;
+}
+
+.btn.primary {
+    background: #0ea5e9;
+    color: #0b1220;
+    border-color: #0891d2;
+}
+
+.btn.primary:hover {
+    background: #0891d2;
+}
+
+.btn.secondary:hover {
+    background: #111a2c;
+}
+
+.section {
+    padding: 3rem 0;
+}
+
+.section.alt {
+    background: #0e1726;
+}
+
+.section h3 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    color: #e6edf6;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: .5rem;
+}
+
+.tags span, .tags.large li {
+    background: #1b2942;
+    color: #cfe6ff;
+    padding: .25rem .5rem;
+    border-radius: .5rem;
+    font-size: .85rem;
+}
+
+.tags.large {
+    list-style: none;
+    padding: 0;
+    margin: .5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.contact-links {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.site-footer {
+    border-top: 1px solid #1b2538;
+    background: #0b1220;
+}
+
+.site-footer .container {
+    padding: 1rem;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #93a3b8;
+    font-size: .95rem;
+}
+
+.nav-button {
+    position: relative;
+}
+
+.nav-button::after {
+    align-self: center;
+    content: '';
+    visibility: hidden;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    transition: width 500ms ease-out, visibility 500ms ease-out;
+    background: var(--blue-gradient);
+}
+
+.nav-button:hover::after {
+    visibility: visible;
+    width: 100%;
+}
+
+@media (max-width: 640px) {
+    nav a {
+        margin-left: .75rem;
+    }
+
+    .site-header .container {
+        padding: .75rem;
+    }
+}

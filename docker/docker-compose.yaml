@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    links:
+      - php-fpm
+    ports:
+      - "67:80"
+    volumes:
+      - package:/usr/share/nginx/html
+  php-fpm:
+    image: php:8.5-fpm
+
+    volumes:
+      - package:/var/www/html
+
+volumes:
+  package:

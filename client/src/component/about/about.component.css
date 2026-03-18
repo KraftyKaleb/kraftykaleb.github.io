@@ -1,0 +1,6 @@
+.section { padding: 3rem 0; }
+.section h3 { margin: 0 0 1rem; font-size: 1.5rem; color: #e6edf6; }
+.section p { color: #c5d0df; }
+.quick-facts { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .5rem 1rem; }
+.quick-facts li { display: flex; align-items: center; gap: .5rem; color: #c5d0df; }
+.quick-facts a { color: #8ac7ff; text-decoration: underline; }

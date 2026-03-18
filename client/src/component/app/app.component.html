@@ -1,0 +1,31 @@
+<header class="site-header">
+    <a class="logo-wrapper" routerLink="">
+        <div class="photo-wrapper">
+            <img src="assets/headshot.jpg" alt="Professional headshot of Kaleb Gilson" class="headshot" />
+        </div>
+        <div class="logo-text">
+            <span class="logo-name">Kaleb Gilson</span>
+            <span class="logo-title">Full-Stack Software Engineer</span>
+        </div>
+    </a>
+    <nav aria-label="Primary" class="topbar-nav">
+        <div class="button-group">
+            <a class="nav-button" routerLink="/about" routerLinkActive="active" ariaCurrentWhenActive="page">About</a>
+            <a class="nav-button" routerLink="/projects" routerLinkActive="active" ariaCurrentWhenActive="page">Projects</a>
+            <a class="nav-button" routerLink="/skills" routerLinkActive="active" ariaCurrentWhenActive="page">Skills</a>
+            <a class="nav-button" routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page">Contact</a>
+        </div>
+
+      <a class="btn resume" href="assets/resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© {{ currentYear }} Kaleb Gilson</p>
+  </div>
+</footer>

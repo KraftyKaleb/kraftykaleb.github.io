@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+  --blue-gradient: linear-gradient(90deg,rgba(255, 255, 255, 1) 0%, rgba(0, 212, 255, 1) 100%);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "JetBrains Mono", monospace;
+    background: linear-gradient(180deg, #0f1b2d 0%, #0b1220 60%);
+    color: #e6edf6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}

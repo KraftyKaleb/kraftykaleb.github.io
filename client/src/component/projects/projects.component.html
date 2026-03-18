@@ -1,0 +1,30 @@
+<section>
+    <h1>Projects</h1>
+    <p>Work that reflects how I build, solve, and experiment.</p>
+
+    <h2>Professional Projects</h2>
+    <p>My highest quality work, comprised of the most valuable use of my time. Often, these projects are sponsored by full-time employers.</p>
+    <div class="card-group">
+        @for (project of professionalProjects(); track $index) {
+            <app-project [project]="project" />
+        }
+    </div>
+
+    <h2>Side Projects</h2>
+    <p>These projects are one-offs, but still require a professional tone.</p>
+    <div class="card-group">
+        @for (project of sideProjects(); track $index) {
+            <app-project [project]="project" />
+        }
+    </div>
+
+    <h2>Other Projects</h2>
+    <p>These are projects that don't easily fall into another category. Generally, you can recognize these as
+        times where I got annoyed and thought "Fine, I'll do it myself 🫰". These are the lowest quality of my work,
+        and tend to be thrown together for niche situations when I need quick automation.</p>
+    <div class="card-group">
+        @for (project of otherProjects(); track $index) {
+            <app-project [project]="project" />
+        }
+    </div>
+</section>
