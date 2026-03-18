@@ -92,4 +92,4 @@ jobs:
         run: ssh $USER@$HOST 'cd /home/kraft/web && unzip -o release.zip && rm release.zip'
 
       - name: Start docker containers
-        run: ssh $USER@$HOST 'cd /home/kraft/web/docker && docker compose -f docker-compose.yml up -d'
+        run: ssh $USER@$HOST 'cd /home/kraft/web/docker && docker compose -f docker-compose.yaml up -d'
