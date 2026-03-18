@@ -83,7 +83,6 @@ jobs:
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
       - name: Clean remote directory
-        working-directory: /home/kraft
         run: ssh $USER@$HOST 'rm -rfv /home/kraft/web/*'
 
       - name: Upload release
