@@ -64,24 +64,26 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    env:
+      HOST: ${{ vars.HOST }}
+      USER: ${{ vars.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: bundle
 
-      - name: Deploy to server
-        env:
-          HOST: ${{ vars.HOST }}
-          USER: ${{ vars.USER }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
           
+      - name: Deploy
+        run: |
           ssh $USER@$HOST 'which unzip || (sudo apt-get update && sudo apt-get install -y unzip)'
           ssh $USER@$HOST 'cd /home/kraft/web && rm -rfv'
           scp -C -v release.zip $USER@$HOST:/home/kraft/web/
