@@ -75,13 +75,23 @@ jobs:
         with:
           name: bundle
           
-      - name: Deploy
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
-          ssh $USER@$HOST 'cd /home/kraft/web && rm -rfv'
-          scp -C -v release.zip $USER@$HOST:/home/kraft/web/
-          ssh $USER@$HOST 'cd /home/kraft/web && unzip -o release.zip && rm release.zip'
-          ssh $USER@$HOST 'cd /home/kraft/web/docker && docker compose -f docker-compose.yml up -d'
+
+      - name: Clean remote directory
+        run: |
+          ssh $USER@$HOST 'cd /home/kraft && if [ -d web ]; then cd web && rm -rfv *; fi'
+          ssh $USER@$HOST 'mkdir /home/kraft/web/'
+
+      - name: Upload release
+        run: scp -C -v release.zip $USER@$HOST:/home/kraft/web/
+
+      - name: Extract release
+        run: ssh $USER@$HOST 'cd /home/kraft/web && unzip -o release.zip && rm release.zip'
+
+      - name: Start docker containers
+        run: ssh $USER@$HOST 'cd /home/kraft/web/docker && docker compose -f docker-compose.yml up -d'
