@@ -74,16 +74,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bundle
-
-      - name: Setup SSH
+          
+      - name: Deploy
         run: |
           mkdir -p ~/.ssh/
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
-          
-      - name: Deploy
-        run: |
           ssh $USER@$HOST 'which unzip || (sudo apt-get update && sudo apt-get install -y unzip)'
           ssh $USER@$HOST 'cd /home/kraft/web && rm -rfv'
           scp -C -v release.zip $USER@$HOST:/home/kraft/web/
