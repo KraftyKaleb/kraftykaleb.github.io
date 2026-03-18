@@ -83,9 +83,9 @@ jobs:
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
       - name: Clean remote directory
+        working-directory: /home/kraft
         run: |
-          ssh $USER@$HOST 'cd /home/kraft && if [ -d web ]; then cd web && rm -rfv *; fi'
-          ssh $USER@$HOST 'mkdir /home/kraft/web/'
+          ssh $USER@$HOST 'if [ -d web ]; then cd web && rm -rfv *; else mkdir -p web; fi'
 
       - name: Upload release
         run: scp -C -v release.zip $USER@$HOST:/home/kraft/web/
