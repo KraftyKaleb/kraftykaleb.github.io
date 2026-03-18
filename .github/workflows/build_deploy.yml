@@ -81,7 +81,6 @@ jobs:
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
-          ssh $USER@$HOST 'which unzip || (sudo apt-get update && sudo apt-get install -y unzip)'
           ssh $USER@$HOST 'cd /home/kraft/web && rm -rfv'
           scp -C -v release.zip $USER@$HOST:/home/kraft/web/
           ssh $USER@$HOST 'cd /home/kraft/web && unzip -o release.zip && rm release.zip'
