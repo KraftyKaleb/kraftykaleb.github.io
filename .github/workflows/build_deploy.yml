@@ -76,7 +76,7 @@ jobs:
           USER: ${{ vars.USER }}
           PASSWORD: ${{ secrets.PASSWORD }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        run:
+        run: |
           mkdir -p ~/.ssh/
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
