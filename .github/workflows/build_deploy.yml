@@ -84,8 +84,7 @@ jobs:
 
       - name: Clean remote directory
         working-directory: /home/kraft
-        run: |
-          ssh $USER@$HOST 'if [ -d web ]; then cd web && rm -rfv *; else mkdir -p web; fi'
+        run: ssh $USER@$HOST 'rm -rfv /home/kraft/web/*'
 
       - name: Upload release
         run: scp -C -v release.zip $USER@$HOST:/home/kraft/web/
