@@ -6,7 +6,7 @@ services:
     links:
       - php-fpm
     ports:
-      - "67:80"
+      - "8008:80"
     volumes:
       - package:/usr/share/nginx/html
   php-fpm:
