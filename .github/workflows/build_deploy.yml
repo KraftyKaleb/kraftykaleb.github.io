@@ -83,13 +83,13 @@ jobs:
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
       - name: Clean remote directory
-        run: ssh $USER@$HOST 'rm -rfv /home/kraft/web/*'
+        run: ssh $USER@$HOST 'rm -rfv /home/github-service/web/*'
 
       - name: Upload release
-        run: scp -C -v release.zip $USER@$HOST:/home/kraft/web/
+        run: scp -C -v release.zip $USER@$HOST:/home/github-service/web/
 
       - name: Extract release
-        run: ssh $USER@$HOST 'cd /home/kraft/web && unzip -o release.zip && rm release.zip'
+        run: ssh $USER@$HOST 'cd /home/github-service/web && unzip -o release.zip && rm release.zip'
 
       - name: Start docker containers
-        run: ssh $USER@$HOST 'cd /home/kraft/web/docker && docker compose -f docker-compose.yaml up -d'
+        run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d'
