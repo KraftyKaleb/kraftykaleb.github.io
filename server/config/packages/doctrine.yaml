@@ -1,0 +1,56 @@
+doctrine:
+    dbal:
+        connections:
+            default:
+                url: '%env(resolve:DATABASE_URL)%'
+                charset: utf8mb4
+                logging: false
+                profiling: false
+                default_table_options:
+                    charset: utf8mb4
+                    collation: utf8mb4_unicode_ci
+    orm:
+        default_entity_manager: default
+        enable_native_lazy_objects: true
+
+        entity_managers:
+            default:
+                connection: default
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                mappings:
+                    Core:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Model'
+                        prefix: 'App\Model'
+                        alias: Core
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
+
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            metadata_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool

@@ -1,0 +1,83 @@
+monolog:
+    use_microseconds: false
+
+when@dev:
+    monolog:
+        channels:
+            - deprecation
+
+        handlers:
+
+            main:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: debug
+                formatter: monolog.formatter.line
+                channels:
+                    - "!event"
+                    - "!http_client"
+                    - "!deprecation"
+
+            deprecation:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
+                level: info
+                formatter: monolog.formatter.line
+                channels:
+                    - "deprecation"
+
+            console:
+                type: console
+                process_psr_3_messages: false
+                channels:
+                    - "!deprecation"
+                    - "!app"
+
+            console_app:
+                type: console
+                process_psr_3_messages: false
+                verbosity_levels:
+                    verbosity_quiet: error
+                    verbosity_normal: info
+                    verbosity_verbose: info
+                    verbosity_very_verbose: info
+                    verbosity_debug: debug
+                channels:
+                    - "deprecation"
+                    - "app"
+
+when@prod:
+    monolog:
+        handlers:
+
+            app:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: info
+                formatter: monolog.formatter.line
+                channels:
+                    - "app"
+
+            main:
+                type: fingers_crossed
+                action_level: error
+                handler: nested
+                buffer_size: 50 # Prevent memory leaks
+                excluded_http_codes:
+                    - 401
+                    - 403
+                    - 404
+                    - 422
+                    - 410
+                channels:
+                    - "!app"
+
+            nested:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.log"
+                level: debug
+                formatter: monolog.formatter.line
+
+            console:
+                type: console
+                process_psr_3_messages: false

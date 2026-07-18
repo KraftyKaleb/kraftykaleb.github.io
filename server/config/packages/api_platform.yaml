@@ -1,0 +1,24 @@
+api_platform:
+    defaults:
+        stateless: true
+        extraProperties:
+            standard_put: true
+            rfc_7807_compliant_errors: true
+        normalization_context:
+            skip_null_values: false
+        pagination_enabled: false
+
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Model'
+
+    formats:
+        jsonld: [ 'application/ld+json' ]
+        json: [ 'application/json' ]
+
+when@prod:
+    api_platform:
+        enable_docs: false
+        enable_entrypoint: false
+        enable_swagger: false
+        enable_swagger_ui: false
