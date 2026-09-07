@@ -4,9 +4,18 @@ import {AboutComponent} from './component/about/about.component';
 import {ProjectsComponent} from './component/projects/projects.component';
 import {SkillsComponent} from './component/skills/skills.component';
 import {ContactComponent} from './component/contact/contact.component';
+import {HomeComponent as AdminHomeComponent} from './component/admin/home/home.component'
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
+    {path: 'admin', children: [
+            {
+                path: '',
+                component: AdminHomeComponent
+                
+            }
+        ]
+    },
     {path: 'about', component: AboutComponent},
     {path: 'projects', component: ProjectsComponent},
     {path: 'skills', component: SkillsComponent},
