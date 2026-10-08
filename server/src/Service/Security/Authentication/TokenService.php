@@ -48,7 +48,7 @@ final class TokenService {
             ->setIssuedAt($now)
             ->setNotBefore($now)
             ->setExpiration($expiresAt)
-            ->setSubject($user->id->toRfc4122())
+            ->setSubject($user->id)
             ->set(self::USERNAME_CLAIM, $user->username)
             ->toString();
 

@@ -8,7 +8,6 @@ use App\Service\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
@@ -16,8 +15,8 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    public private(set) Uuid $id;
+    #[ORM\Column(length: 36, options: ['fixed' => true])]
+    public private(set) string $id;
 
     #[ORM\Column(length: 180, unique: true)]
     public string $username;
@@ -31,7 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     public private(set) Collection $roles;
 
     public function __construct(string $username) {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v4()->toRfc4122();
         $this->username = $username;
         $this->roles = new ArrayCollection();
     }
