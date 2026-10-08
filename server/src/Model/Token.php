@@ -6,8 +6,8 @@ namespace App\Model;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
-use App\Service\State\CurrentTokenProvider;
-use App\Service\State\TokenRequestProcessor;
+use App\Service\State\Processor\TokenPutProcessor;
+use App\Service\State\Provider\TokenGetProvider;
 use DateTimeImmutable;
 
 /**
@@ -22,13 +22,13 @@ use DateTimeImmutable;
     read: false,
     deserialize: false,
     validate: false,
-    processor: TokenRequestProcessor::class,
+    processor: TokenPutProcessor::class,
 )]
 #[Get(
     uriTemplate: '/token',
     uriVariables: [],
     security: "is_granted('ROLE_ADMIN')",
-    provider: CurrentTokenProvider::class,
+    provider: TokenGetProvider::class,
 )]
 final class Token {
     public function __construct(

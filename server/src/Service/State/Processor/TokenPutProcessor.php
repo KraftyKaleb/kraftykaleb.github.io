@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\State;
+namespace App\Service\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  *
  * @implements ProcessorInterface<mixed, never>
  */
-final class TokenRequestProcessor implements ProcessorInterface {
+final class TokenPutProcessor implements ProcessorInterface {
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): never {
         throw new BadRequestHttpException('Send a JSON body with "username" and "password".');
     }

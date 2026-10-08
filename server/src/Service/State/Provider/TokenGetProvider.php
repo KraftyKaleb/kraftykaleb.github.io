@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Service\State;
+namespace App\Service\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\AccessToken\HeaderAccessTokenExtractor;
  *
  * @implements ProviderInterface<Token>
  */
-final readonly class CurrentTokenProvider implements ProviderInterface {
+final readonly class TokenGetProvider implements ProviderInterface {
     public function __construct(
         private RequestStack $requestStack,
         private TokenService $tokens,
