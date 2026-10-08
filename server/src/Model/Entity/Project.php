@@ -61,7 +61,7 @@ class Project {
     public private(set) Collection $links;
 
     public function __construct() {
-        $this->id = Uuid::v7();
+        $this->id = Uuid::v4();
         $this->tags = new ArrayCollection();
         $this->links = new ArrayCollection();
     }

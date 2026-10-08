@@ -59,6 +59,6 @@ class Link {
     public ?Project $project = null;
 
     public function __construct() {
-        $this->id = Uuid::v7();
+        $this->id = Uuid::v4();
     }
 }
