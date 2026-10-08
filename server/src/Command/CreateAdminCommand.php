@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Service\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,9 +31,18 @@ final readonly class CreateAdminCommand {
             return $value;
         });
 
+        $adminRole = $this->entityManager->getRepository(Role::class)->findOneBy(['name' => Role::ADMIN]);
+        if ($adminRole === null) {
+            $adminRole = new Role(Role::ADMIN);
+            $this->entityManager->persist($adminRole);
+        }
+
         $user = $this->users->findOneBy(['username' => $username]);
         $created = $user === null;
         $user ??= new User($username);
+        if (!$user->roles->contains($adminRole)) {
+            $user->roles->add($adminRole);
+        }
         $user->password = $this->hasher->hashPassword($user, $password);
 
         $this->entityManager->persist($user);

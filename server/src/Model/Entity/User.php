@@ -5,19 +5,16 @@ namespace App\Model\Entity;
 
 
 use App\Service\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
-/**
- * An admin of the API. Every user is an admin, so there is no roles column.
- */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
-    public const string ROLE_ADMIN = 'ROLE_ADMIN';
-
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     public private(set) Uuid $id;
@@ -29,9 +26,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     #[ORM\Column]
     public string $password = '';
 
+    /** @var Collection<int, Role> */
+    #[ORM\ManyToMany(targetEntity: Role::class)]
+    public private(set) Collection $roles;
+
     public function __construct(string $username) {
         $this->id = Uuid::v7();
         $this->username = $username;
+        $this->roles = new ArrayCollection();
     }
 
     public function getUserIdentifier(): string {
@@ -44,6 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
     /** @return list<string> */
     public function getRoles(): array {
-        return [self::ROLE_ADMIN];
+        return array_values($this->roles->map(static fn (Role $role) => $role->name)->toArray());
     }
 }

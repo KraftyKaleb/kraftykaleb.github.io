@@ -19,7 +19,7 @@ security:
             login_throttling:
                 max_attempts: 10
             json_login:
-                check_path: app_token
+                check_path: /token
                 success_handler: App\Service\Security\Authentication\LoginSuccessHandler
         api:
             pattern: ^/
@@ -30,7 +30,8 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:

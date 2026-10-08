@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Service\Security\Authentication;
 
 use App\Model\Entity\User;
+use App\Model\Token;
 use DateInterval;
 use DateTimeImmutable;
 use ParagonIE\Paseto\Builder;
 use ParagonIE\Paseto\Exception\PasetoException;
+use ParagonIE\Paseto\JsonToken;
 use ParagonIE\Paseto\Keys\Base\SymmetricKey;
 use ParagonIE\Paseto\Parser;
 use ParagonIE\Paseto\ProtocolCollection;
@@ -20,6 +22,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 final class TokenService {
     private const string ISSUER = 'kraftykaleb-admin-api';
+    private const string USERNAME_CLAIM = 'username';
 
     private readonly SymmetricKey $key;
 
@@ -36,10 +39,7 @@ final class TokenService {
         $this->key = SymmetricKey::v4(hash_hkdf('sha256', $secret, 32, 'access-token'));
     }
 
-    /**
-     * @return array{token: string, expires_at: DateTimeImmutable}
-     */
-    public function issue(User $user): array {
+    public function issue(User $user): Token {
         $now = new DateTimeImmutable();
         $expiresAt = $now->add(new DateInterval($this->ttl));
 
@@ -49,21 +49,38 @@ final class TokenService {
             ->setNotBefore($now)
             ->setExpiration($expiresAt)
             ->setSubject($user->id->toRfc4122())
+            ->set(self::USERNAME_CLAIM, $user->username)
             ->toString();
 
-        return ['token' => $token, 'expires_at' => $expiresAt];
+        return new Token($token, $expiresAt, $user->username);
     }
 
     /**
-     * Returns the user id the token was issued for, or null when the token is invalid or expired.
+     * Returns the id of the user the token was issued for, or null when the token is invalid or expired.
      */
     public function verify(string $token): ?string {
+        return $this->parse($token)?->getSubject();
+    }
+
+    /**
+     * Returns the token's details, or null when the token is invalid or expired.
+     */
+    public function read(string $token): ?Token {
+        $parsed = $this->parse($token);
+
+        return $parsed === null ? null : new Token(
+            $token,
+            DateTimeImmutable::createFromInterface($parsed->getExpiration()),
+            $parsed->get(self::USERNAME_CLAIM),
+        );
+    }
+
+    private function parse(string $token): ?JsonToken {
         try {
             return Parser::getLocal($this->key, ProtocolCollection::v4())
                 ->addRule(new IssuedBy(self::ISSUER))
                 ->addRule(new ValidAt())
-                ->parse($token)
-                ->getSubject();
+                ->parse($token);
         } catch (PasetoException) {
             return null;
         }
