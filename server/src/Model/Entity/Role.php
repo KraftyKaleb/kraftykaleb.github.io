@@ -22,7 +22,7 @@ class Role {
     public private(set) string $name;
 
     public function __construct(string $name) {
-        $this->id = Uuid::v7();
+        $this->id = Uuid::v4();
         $this->name = $name;
     }
 }

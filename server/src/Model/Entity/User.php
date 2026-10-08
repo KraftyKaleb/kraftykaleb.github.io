@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     public private(set) Collection $roles;
 
     public function __construct(string $username) {
-        $this->id = Uuid::v7();
+        $this->id = Uuid::v4();
         $this->username = $username;
         $this->roles = new ArrayCollection();
     }
