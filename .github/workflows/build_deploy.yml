@@ -27,15 +27,18 @@ jobs:
         with:
           files: 'server/composer.json'
 
-      - name: Create .env.local from secret
-        working-directory: server
-        env:
-          ENV_SECRET: ${{ secrets.ENV_LOCAL }}
-        run: echo "$ENV_SECRET" > .env.local
-
+      # Secrets are not written here: anything in this job ends up in the downloadable
+      # build artifact. The deploy job writes server/.env.local straight to the server.
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
         working-directory: server
+        env:
+          # Warm the prod cache so the server never has to build it. Env vars are
+          # resolved at runtime, so no secret values are baked into the cache.
+          APP_ENV: prod
+          # Placeholder so the container compiles before a real DATABASE_URL exists;
+          # the server's .env.local supplies the real one.
+          DATABASE_URL: 'mysql://build:build@127.0.0.1:3306/build?serverVersion=11.4.0-MariaDB&charset=utf8mb4'
         run: composer validate --no-check-publish && composer update --prefer-dist --no-progress
 
 
@@ -70,6 +73,22 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
+      - name: Check production secrets
+        env:
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          for name in APP_SECRET DATABASE_URL; do
+            value="${!name}"
+            if [ -z "$value" ]; then
+              echo "::error::Secret $name is not set. Add it under Settings > Secrets and variables > Actions."
+              exit 1
+            fi
+            case "$value" in
+              *"'"*|*$'\n'*) echo "::error::Secret $name must not contain single quotes or newlines."; exit 1 ;;
+            esac
+          done
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
@@ -90,6 +109,18 @@ jobs:
 
       - name: Extract release
         run: ssh $USER@$HOST 'cd /home/github-service/web && unzip -o release.zip && rm release.zip'
+
+      - name: Write server/.env.local
+        env:
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DEFAULT_URI: ${{ vars.DEFAULT_URI || 'http://localhost' }}
+        # Sent over stdin so the values never appear in a command line on either machine.
+        # Single quotes keep Dotenv from interpolating characters like $ in passwords.
+        run: |
+          printf "APP_ENV=prod\nAPP_SECRET='%s'\nDATABASE_URL='%s'\nDEFAULT_URI='%s'\n" \
+            "$APP_SECRET" "$DATABASE_URL" "$DEFAULT_URI" \
+            | ssh $USER@$HOST 'umask 022 && cat > /home/github-service/web/server/.env.local'
 
       - name: Start docker containers
         run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d'
