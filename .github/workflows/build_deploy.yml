@@ -73,21 +73,14 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
-      - name: Check production secrets
+      - name: Check .env secret
         env:
-          APP_SECRET: ${{ secrets.APP_SECRET }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ENV_SECRET: ${{ secrets.DEV_DOT_ENV }}
         run: |
-          for name in APP_SECRET DATABASE_URL; do
-            value="${!name}"
-            if [ -z "$value" ]; then
-              echo "::error::Secret $name is not set. Add it under Settings > Secrets and variables > Actions."
-              exit 1
-            fi
-            case "$value" in
-              *"'"*|*$'\n'*) echo "::error::Secret $name must not contain single quotes or newlines."; exit 1 ;;
-            esac
-          done
+          if [ -z "$ENV_SECRET" ]; then
+            echo "::error::Secret DEV_DOT_ENV is not set. Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -110,16 +103,12 @@ jobs:
       - name: Extract release
         run: ssh $USER@$HOST 'cd /home/github-service/web && unzip -o release.zip && rm release.zip'
 
-      - name: Write server/.env.local
+      # Sent over stdin so the contents never appear in a command line on either machine.
+      - name: Create .env.local from secret
         env:
-          APP_SECRET: ${{ secrets.APP_SECRET }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DEFAULT_URI: ${{ vars.DEFAULT_URI || 'http://localhost' }}
-        # Sent over stdin so the values never appear in a command line on either machine.
-        # Single quotes keep Dotenv from interpolating characters like $ in passwords.
+          ENV_SECRET: ${{ secrets.DEV_DOT_ENV }}
         run: |
-          printf "APP_ENV=prod\nAPP_SECRET='%s'\nDATABASE_URL='%s'\nDEFAULT_URI='%s'\n" \
-            "$APP_SECRET" "$DATABASE_URL" "$DEFAULT_URI" \
+          printf '%s\n' "$ENV_SECRET" \
             | ssh $USER@$HOST 'umask 022 && cat > /home/github-service/web/server/.env.local'
 
       - name: Start docker containers
