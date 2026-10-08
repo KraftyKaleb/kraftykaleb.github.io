@@ -3,6 +3,9 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
+    # Run the startup script from the bind mount, so changes to it ship without
+    # rebuilding the image (building it on the server gets killed).
+    command: ["sh", "/var/www/html/docker/entrypoint.sh"]
     ports:
       - "8008:80"
     volumes:
