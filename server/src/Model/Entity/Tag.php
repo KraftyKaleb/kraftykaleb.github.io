@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
@@ -31,9 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class Tag {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\Column(length: 36, options: ['fixed' => true])]
     #[Groups(['tag:read', 'project:read'])]
-    public private(set) Uuid $id;
+    public private(set) string $id;
 
     #[ORM\Column(length: 64, unique: true)]
     #[Assert\NotBlank]
@@ -42,6 +41,6 @@ class Tag {
     public string $name = '';
 
     public function __construct() {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v4()->toRfc4122();
     }
 }

@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -32,9 +31,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 class Project {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\Column(length: 36, options: ['fixed' => true])]
     #[Groups(['project:read'])]
-    public private(set) Uuid $id;
+    public private(set) string $id;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -61,7 +60,7 @@ class Project {
     public private(set) Collection $links;
 
     public function __construct() {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v4()->toRfc4122();
         $this->tags = new ArrayCollection();
         $this->links = new ArrayCollection();
     }
