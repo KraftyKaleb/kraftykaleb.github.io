@@ -5,48 +5,33 @@ namespace App\Model\Entity;
 
 
 use App\Service\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * An admin of the API. Every user is an admin, so there is no roles column.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
     public const string ROLE_ADMIN = 'ROLE_ADMIN';
 
     #[ORM\Id]
-    #[ORM\Column(
-        length: 36,
-        options: [
-            'fixed'=> true,
-        ]
-    )]
-    #[ORM\GeneratedValue(strategy: "NONE")]
-    private string $id;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    public private(set) Uuid $id;
 
     #[ORM\Column(length: 180, unique: true)]
-    private string $username;
+    public string $username;
 
+    /** The hashed password. */
     #[ORM\Column]
-    private string $password = '';
+    public string $password = '';
 
-    /** @var list<string> */
-    #[ORM\Column(type: Types::JSON)]
-    private array $roles = [];
-
-    public function __construct(string $username, array $roles = [self::ROLE_ADMIN]) {
-        $this->id = Uuid::v7()->toRfc4122();
+    public function __construct(string $username) {
+        $this->id = Uuid::v7();
         $this->username = $username;
-        $this->setRoles($roles);
-    }
-
-    public function getId(): string {
-        return $this->id;
-    }
-
-    public function getUsername(): string {
-        return $this->username;
     }
 
     public function getUserIdentifier(): string {
@@ -57,21 +42,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         return $this->password;
     }
 
-    public function setPassword(string $hashedPassword): self {
-        $this->password = $hashedPassword;
-
-        return $this;
-    }
-
     /** @return list<string> */
     public function getRoles(): array {
-        return array_values(array_unique([...$this->roles, 'ROLE_USER']));
-    }
-
-    /** @param list<string> $roles */
-    public function setRoles(array $roles): self {
-        $this->roles = array_values(array_unique($roles));
-
-        return $this;
+        return [self::ROLE_ADMIN];
     }
 }

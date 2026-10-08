@@ -12,8 +12,8 @@ final class MeController {
     #[Route('/admin/me', name: 'app_admin_me', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user): JsonResponse {
         return new JsonResponse([
-            'id' => $user->getId(),
-            'username' => $user->getUsername(),
+            'id' => $user->id->toRfc4122(),
+            'username' => $user->username,
             'roles' => $user->getRoles(),
         ]);
     }

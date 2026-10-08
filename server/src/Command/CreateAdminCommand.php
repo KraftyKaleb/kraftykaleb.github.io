@@ -33,8 +33,7 @@ final readonly class CreateAdminCommand {
         $user = $this->users->findOneBy(['username' => $username]);
         $created = $user === null;
         $user ??= new User($username);
-        $user->setRoles([User::ROLE_ADMIN]);
-        $user->setPassword($this->hasher->hashPassword($user, $password));
+        $user->password = $this->hasher->hashPassword($user, $password);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

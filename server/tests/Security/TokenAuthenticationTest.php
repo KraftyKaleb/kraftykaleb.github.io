@@ -26,7 +26,7 @@ final class TokenAuthenticationTest extends WebTestCase {
         $schemaTool->createSchema($metadata);
 
         $admin = new User('admin');
-        $admin->setPassword($container->get(UserPasswordHasherInterface::class)->hashPassword($admin, self::PASSWORD));
+        $admin->password = $container->get(UserPasswordHasherInterface::class)->hashPassword($admin, self::PASSWORD);
         $entityManager->persist($admin);
         $entityManager->flush();
     }

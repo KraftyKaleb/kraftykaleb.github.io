@@ -48,7 +48,7 @@ final class TokenService {
             ->setIssuedAt($now)
             ->setNotBefore($now)
             ->setExpiration($expiresAt)
-            ->setSubject($user->getId())
+            ->setSubject($user->id->toRfc4122())
             ->toString();
 
         return ['token' => $token, 'expires_at' => $expiresAt];
