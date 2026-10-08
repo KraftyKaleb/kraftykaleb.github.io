@@ -112,4 +112,4 @@ jobs:
             | ssh $USER@$HOST 'umask 022 && cat > /home/github-service/web/server/.env.local'
 
       - name: Start docker containers
-        run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d --build'
+        run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d'
