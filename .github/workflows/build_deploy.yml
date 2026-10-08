@@ -27,15 +27,18 @@ jobs:
         with:
           files: 'server/composer.json'
 
-      - name: Create .env.local from secret
-        working-directory: server
-        env:
-          ENV_SECRET: ${{ secrets.ENV_LOCAL }}
-        run: echo "$ENV_SECRET" > .env.local
-
+      # Secrets are not written here: anything in this job ends up in the downloadable
+      # build artifact. The deploy job writes server/.env.local straight to the server.
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
         working-directory: server
+        env:
+          # Warm the prod cache so the server never has to build it. Env vars are
+          # resolved at runtime, so no secret values are baked into the cache.
+          APP_ENV: prod
+          # Placeholder so the container compiles before a real DATABASE_URL exists;
+          # the server's .env.local supplies the real one.
+          DATABASE_URL: 'mysql://build:build@127.0.0.1:3306/build?serverVersion=11.4.0-MariaDB&charset=utf8mb4'
         run: composer validate --no-check-publish && composer update --prefer-dist --no-progress
 
 
@@ -70,6 +73,15 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
+      - name: Check .env secret
+        env:
+          ENV_SECRET: ${{ secrets.DEV_DOT_ENV }}
+        run: |
+          if [ -z "$ENV_SECRET" ]; then
+            echo "::error::Secret DEV_DOT_ENV is not set. Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
@@ -91,5 +103,13 @@ jobs:
       - name: Extract release
         run: ssh $USER@$HOST 'cd /home/github-service/web && unzip -o release.zip && rm release.zip'
 
+      # Sent over stdin so the contents never appear in a command line on either machine.
+      - name: Create .env.local from secret
+        env:
+          ENV_SECRET: ${{ secrets.DEV_DOT_ENV }}
+        run: |
+          printf '%s\n' "$ENV_SECRET" \
+            | ssh $USER@$HOST 'umask 022 && cat > /home/github-service/web/server/.env.local'
+
       - name: Start docker containers
-        run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d'
+        run: ssh $USER@$HOST 'cd /home/github-service/web/docker && docker compose -f docker-compose.yaml up -d --build'

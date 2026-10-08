@@ -18,7 +18,8 @@ RUN apt-get update -y  \
 
 COPY ../ /var/www/html/
 COPY ../nginx.conf /etc/nginx/nginx.conf
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-CMD ["sh", "-c", "service php8.5-fpm start && exec nginx -g 'daemon off;'"]
+CMD ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 80
