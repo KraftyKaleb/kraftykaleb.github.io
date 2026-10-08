@@ -7,31 +7,30 @@ security:
     providers:
         users:
             entity:
-                class: 'App\Core\Model\Entity\User'
-                property: 'id'
+                class: 'App\Model\Entity\User'
+                property: 'username'
     firewalls:
+        # PUT /token with {"username": "...", "password": "..."} returns a bearer access token
         login:
             pattern: ^/token$
             methods: [ PUT ]
             stateless: true
+            provider: users
             login_throttling:
                 max_attempts: 10
-            entry_point: Symfony\Component\Ldap\Security\LdapAuthenticator#und
-            custom_authenticators:
-                - Symfony\Component\Ldap\Security\LdapAuthenticator#und
-                - App\Core\Service\Security\Authentication\FailureAuthenticator
+            json_login:
+                check_path: app_token
+                success_handler: App\Service\Security\Authentication\LoginSuccessHandler
         api:
             pattern: ^/
             stateless: true
             provider: users
             access_token:
-                token_extractors: App\Core\Service\Security\Authentication\TokenExtractor
-                token_handler: App\Core\Service\Security\Authentication\TokenHandler
+                token_handler: App\Service\Security\Authentication\TokenHandler
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:
