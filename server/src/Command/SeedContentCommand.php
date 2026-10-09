@@ -67,18 +67,18 @@ final readonly class SeedContentCommand {
             $tags[$tag->name] = $tag;
         }
 
-        foreach (self::PROJECTS as $position => $data) {
+        foreach (self::PROJECTS as $ordinal => $data) {
             $project = new Project();
             $project->name = $data['name'];
             $project->description = $data['description'];
             $project->category = $data['category'];
-            $project->position = $position;
+            $project->ordinal = $ordinal;
 
             foreach ($data['tags'] as $name) {
                 if (!isset($tags[$name])) {
                     $tag = new Tag();
                     $tag->name = $name;
-                    $tag->position = count($tags);
+                    $tag->ordinal = count($tags);
                     $this->entityManager->persist($tag);
                     $tags[$name] = $tag;
                 }
