@@ -5,7 +5,4 @@
 .quick-facts li { display: flex; align-items: center; gap: .5rem; color: #c5d0df; }
 .quick-facts a { color: #8ac7ff; text-decoration: underline; }
 .ai-workflow { padding-top: 0; }
-.ai-uses { list-style: none; margin: 1rem 0; padding: 0; display: grid; gap: .75rem; }
-.ai-uses li { display: flex; align-items: flex-start; gap: .75rem; color: #c5d0df; }
-.ai-uses .pi { color: #8ac7ff; margin-top: .2rem; }
-.draft-badge { display: inline-block; margin-left: .5rem; padding: .1rem .5rem; border: 1px dashed #f5c26b; border-radius: 4px; color: #f5c26b; font-size: .75rem; vertical-align: middle; text-transform: uppercase; letter-spacing: .05em; }
+.ai-workflow p { white-space: pre-line; }

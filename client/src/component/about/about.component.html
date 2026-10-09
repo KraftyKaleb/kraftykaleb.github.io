@@ -13,23 +13,13 @@
   </div>
 </section>
 
-<!--
-  DRAFT: placeholder text written by Claude, not Kaleb's words.
-  Replace each paragraph and list item with your own take, then delete the draft badge below.
--->
-<section class="section ai-workflow" aria-labelledby="ai-workflow-heading">
-  <div class="container">
-    <h3 id="ai-workflow-heading">AI in My Workflow <span class="draft-badge">Draft</span></h3>
-    <p>
-      [Draft] Your overall take on AI: where you think it helps, where you are skeptical, and how you decide when to reach for it.
-    </p>
-    <ul class="ai-uses">
-      <li><i class="pi pi-code"></i> <span>[Draft] How you use AI while writing and reviewing code.</span></li>
-      <li><i class="pi pi-search"></i> <span>[Draft] How you use it for research, debugging, or learning new tools.</span></li>
-      <li><i class="pi pi-shield"></i> <span>[Draft] Where you keep a human in the loop: review, testing, security, data privacy.</span></li>
-    </ul>
-    <p>
-      [Draft] A closing line on how you see AI changing your work going forward.
-    </p>
-  </div>
-</section>
+@if (aiWorkflow().length) {
+  <section class="section ai-workflow" aria-labelledby="ai-workflow-heading">
+    <div class="container">
+      <h3 id="ai-workflow-heading">AI in My Workflow</h3>
+      @for (paragraph of aiWorkflow(); track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </div>
+  </section>
+}
