@@ -12,3 +12,14 @@
     </ul>
   </div>
 </section>
+
+@if (aiWorkflow().length) {
+  <section class="section ai-workflow" aria-labelledby="ai-workflow-heading">
+    <div class="container">
+      <h3 id="ai-workflow-heading">AI in My Workflow</h3>
+      @for (paragraph of aiWorkflow(); track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </div>
+  </section>
+}
