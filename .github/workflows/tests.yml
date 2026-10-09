@@ -1,0 +1,41 @@
+name: tests
+on:
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    env:
+      # Throwaway values for CI only. No real secrets are used here.
+      APP_SECRET: ci-only-not-a-real-secret-0123456789abcdef0123456789abcdef
+      DATABASE_URL: 'sqlite:///%kernel.project_dir%/var/data.db'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: intl, pdo_sqlite
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --no-check-publish
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPUnit
+        run: php vendor/bin/phpunit
+
+      # Builds the prod container, which catches prod-only config errors the tests miss.
+      - name: Clear prod cache
+        env:
+          APP_ENV: prod
+          APP_DEBUG: '0'
+        run: php bin/console cache:clear
