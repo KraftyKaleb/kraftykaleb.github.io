@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['project:read']],
     denormalizationContext: ['groups' => ['project:write']],
+    order: ['ordinal' => 'ASC'],
 )]
 #[GetCollection]
 #[Get]
@@ -46,9 +47,21 @@ class Project {
     #[Groups(['project:read', 'project:write'])]
     public string $description = '';
 
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
+    #[Groups(['project:read', 'project:write'])]
+    public ?Category $category = null;
+
+    /** Display order on the projects page, lowest first. */
+    #[ORM\Column]
+    #[Groups(['project:read', 'project:write'])]
+    public int $ordinal = 0;
+
     /** @var Collection<int, Tag> */
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     #[ORM\JoinTable(name: 'project_tag')]
+    #[ORM\OrderBy(['ordinal' => 'ASC'])]
     #[Groups(['project:read', 'project:write'])]
     public Collection $tags {
         set(Collection|array $tags) => is_array($tags) ? new ArrayCollection($tags) : $tags;

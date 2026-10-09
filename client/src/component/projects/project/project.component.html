@@ -2,7 +2,7 @@
 <p> {{ project().description }} </p>
 <div class="tags">
     @for (tag of project().tags; track $index) {
-        <span class="tag">{{tag}}</span>
+        <span class="tag">{{tag.name}}</span>
     }
 </div>
 <div class="links">
