@@ -1,0 +1,14 @@
+<section class="admin">
+    <div class="admin-bar">
+        <nav aria-label="Admin" class="admin-tabs">
+            <a routerLink="projects" routerLinkActive="active" ariaCurrentWhenActive="page">Projects</a>
+            <a routerLink="categories" routerLinkActive="active" ariaCurrentWhenActive="page">Categories</a>
+            <a routerLink="tags" routerLinkActive="active" ariaCurrentWhenActive="page">Tags</a>
+        </nav>
+        <div class="admin-actions">
+            <span class="admin-muted">Signed in as {{ auth.token()?.username }}</span>
+            <button class="btn secondary" type="button" (click)="logout()">Log out</button>
+        </div>
+    </div>
+    <router-outlet />
+</section>

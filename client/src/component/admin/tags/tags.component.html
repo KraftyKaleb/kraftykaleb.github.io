@@ -1,0 +1,31 @@
+<div class="admin-heading">
+    <h2>Tags</h2>
+</div>
+<p class="admin-muted">Tags are shared between projects and listed lowest order first.</p>
+@if (error(); as message) {
+    <p class="admin-error" role="alert">{{ message }}</p>
+}
+<table class="admin-table">
+    <thead>
+        <tr><th>Name</th><th>Order</th><th></th></tr>
+    </thead>
+    <tbody>
+        @for (row of rows(); track row.id) {
+            <tr [formGroup]="row.form">
+                <td><input formControlName="name" aria-label="Name" required /></td>
+                <td><input formControlName="ordinal" type="number" step="1" class="admin-narrow" aria-label="Order" required /></td>
+                <td class="admin-row-actions">
+                    <button class="btn secondary" type="button" (click)="save(row)" [disabled]="row.busy() || row.form.pristine">{{ row.saved() ? 'Saved' : 'Save' }}</button>
+                    <button class="btn danger" type="button" (click)="delete(row)" [disabled]="row.busy()">Delete</button>
+                </td>
+            </tr>
+        }
+        <tr [formGroup]="draft">
+            <td><input formControlName="name" placeholder="TypeScript" aria-label="New tag name" /></td>
+            <td><input formControlName="ordinal" type="number" step="1" class="admin-narrow" aria-label="New tag order" /></td>
+            <td class="admin-row-actions">
+                <button class="btn primary" type="button" (click)="add()" [disabled]="adding()">Add tag</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
