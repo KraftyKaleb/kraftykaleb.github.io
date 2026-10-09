@@ -10,6 +10,10 @@ security:
                 class: 'App\Model\Entity\User'
                 property: 'username'
     firewalls:
+        dev:
+            # Ensure dev tools and static assets are always allowed
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
         # PUT /token with {"username": "...", "password": "..."} returns a bearer access token
         login:
             pattern: ^/token$
