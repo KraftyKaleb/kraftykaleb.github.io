@@ -15,9 +15,7 @@
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="KERNEL_CLASS" value="App\Kernel" />
-        <env name="APP_SECRET" value="test-secret-not-for-production" />
-        <env name="DEFAULT_URI" value="http://localhost" />
-        <env name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/var/test.db" />
+        <!-- APP_SECRET and DATABASE_URL come from your local, gitignored .env.test -->
         <server name="SHELL_VERBOSITY" value="-1" />
     </php>
 
