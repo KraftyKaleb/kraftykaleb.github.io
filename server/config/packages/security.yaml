@@ -14,19 +14,19 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
-        # PUT /token with {"username": "...", "password": "..."} returns a bearer access token
+        # PUT /api/token with {"username": "...", "password": "..."} returns a bearer access token
         login:
-            pattern: ^/token$
+            pattern: ^/api/token$
             methods: [ PUT ]
             stateless: true
             provider: users
             login_throttling:
                 max_attempts: 10
             json_login:
-                check_path: /token
+                check_path: /api/token
                 success_handler: App\Service\Security\Authentication\LoginSuccessHandler
         api:
-            pattern: ^/
+            pattern: ^/api
             stateless: true
             provider: users
             access_token:
