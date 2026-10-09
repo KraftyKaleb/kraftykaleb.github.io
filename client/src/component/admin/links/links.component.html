@@ -1,0 +1,30 @@
+<h3>Links</h3>
+@if (error(); as message) {
+    <p class="admin-error" role="alert">{{ message }}</p>
+}
+<table class="admin-table">
+    <thead>
+        <tr><th>Title</th><th>URL</th><th>Icon</th><th></th></tr>
+    </thead>
+    <tbody>
+        @for (row of rows(); track row.id) {
+            <tr [formGroup]="row.form">
+                <td><input formControlName="title" aria-label="Title" required /></td>
+                <td><input formControlName="url" type="url" aria-label="URL" required /></td>
+                <td><input formControlName="icon" aria-label="Icon class" /></td>
+                <td class="admin-row-actions">
+                    <button class="btn secondary" type="button" (click)="save(row)" [disabled]="row.busy() || row.form.pristine">{{ row.saved() ? 'Saved' : 'Save' }}</button>
+                    <button class="btn danger" type="button" (click)="delete(row)" [disabled]="row.busy()">Delete</button>
+                </td>
+            </tr>
+        }
+        <tr [formGroup]="draft">
+            <td><input formControlName="title" placeholder="Demo" aria-label="New link title" /></td>
+            <td><input formControlName="url" type="url" placeholder="https://…" aria-label="New link URL" /></td>
+            <td><input formControlName="icon" aria-label="New link icon class" /></td>
+            <td class="admin-row-actions">
+                <button class="btn primary" type="button" (click)="add()" [disabled]="adding()">Add link</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

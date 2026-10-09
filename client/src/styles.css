@@ -30,3 +30,224 @@ h2 {
 h3 {
     font-size: 1.5rem;
 }
+/* Admin area */
+.admin {
+    padding: 2rem 0;
+
+    h1, h2, h3 {
+        margin: 0;
+    }
+
+    h3 {
+        margin: 2rem 0 0.75rem;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        color: #c5d0df;
+    }
+
+    input, textarea, select {
+        font: inherit;
+        padding: 0.5rem 0.6rem;
+        border-radius: 0.4rem;
+        border: 1px solid #24314a;
+        background: #0b1220;
+        color: #e6edf6;
+        min-width: 0;
+    }
+
+    input:focus-visible, textarea:focus-visible, select:focus-visible {
+        outline: 2px solid #0ea5e9;
+        outline-offset: 1px;
+    }
+
+    .ng-touched.ng-invalid {
+        border-color: #f87171;
+    }
+
+    fieldset {
+        border: 1px solid #24314a;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.5rem;
+        border: 1px solid #24314a;
+        font: inherit;
+        text-decoration: none;
+        color: #e6edf6;
+        background: #0b1220;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    .btn.primary {
+        background: #0ea5e9;
+        color: #0b1220;
+        border-color: #0891d2;
+    }
+
+    .btn.secondary:hover:not(:disabled) {
+        background: #111a2c;
+    }
+
+    .btn.danger {
+        color: #fca5a5;
+        border-color: #7f1d1d;
+    }
+
+    .btn.danger:hover:not(:disabled) {
+        background: #2a1215;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .tags span {
+        background: #1b2942;
+        color: #cfe6ff;
+        padding: 0.15rem 0.45rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    a:not(.btn) {
+        color: #7dd3fc;
+    }
+}
+
+.admin-login {
+    max-width: 24rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-bar, .admin-heading, .admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-bar {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #1b2538;
+}
+
+.admin-heading {
+    margin-bottom: 1rem;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 0.5rem;
+
+    a {
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        color: #c5d0df !important;
+    }
+
+    a.active {
+        background: #1b2942;
+        color: #ffffff !important;
+    }
+}
+
+.admin-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid #1b2538;
+    border-radius: 0.75rem;
+    background: #0e1726;
+}
+
+.admin-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1rem;
+}
+
+.admin-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+
+    label {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+        padding: 0.5rem;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #1b2538;
+    }
+
+    th {
+        color: #93a3b8;
+        font-weight: normal;
+        font-size: 0.85rem;
+    }
+
+    td input, td textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+.admin-row-actions {
+    white-space: nowrap;
+    text-align: right !important;
+
+    > * + * {
+        margin-left: 0.5rem;
+    }
+}
+
+.admin-narrow {
+    max-width: 6rem;
+}
+
+.admin-muted {
+    color: #93a3b8;
+}
+
+.admin-error {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #7f1d1d;
+    border-radius: 0.5rem;
+    background: #2a1215;
+    color: #fecaca;
+    white-space: pre-line;
+}

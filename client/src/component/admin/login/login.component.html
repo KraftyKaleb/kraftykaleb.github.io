@@ -1,0 +1,17 @@
+<section class="admin admin-login">
+    <h1>Admin</h1>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="admin-card">
+        <label>
+            Username
+            <input formControlName="username" autocomplete="username" required />
+        </label>
+        <label>
+            Password
+            <input formControlName="password" type="password" autocomplete="current-password" required />
+        </label>
+        @if (error(); as message) {
+            <p class="admin-error" role="alert">{{ message }}</p>
+        }
+        <button class="btn primary" type="submit" [disabled]="busy()">{{ busy() ? 'Signing in…' : 'Sign in' }}</button>
+    </form>
+</section>

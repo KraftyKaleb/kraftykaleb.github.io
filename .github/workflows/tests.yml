@@ -12,7 +12,8 @@ jobs:
         working-directory: server
     services:
       mariadb:
-        image: mariadb:11.4
+        # Docker Hub rate-limits the shared runners; GCR mirrors the same official image.
+        image: mirror.gcr.io/library/mariadb:11.4
         env:
           MARIADB_ROOT_PASSWORD: ci
           # The test env appends "_test" to the database name (see doctrine.yaml).

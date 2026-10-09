@@ -5,17 +5,19 @@ export class Category {
     public static readonly codec = t.type({
         id: t.string,
         name: t.string,
-        description: t.string
+        description: t.string,
+        ordinal: t.number
     });
 
     public constructor(
         public readonly id: string,
         public readonly name: string,
-        public readonly description: string
+        public readonly description: string,
+        public readonly ordinal: number
     ) {
     }
 
     public static fromJson(json: t.TypeOf<typeof Category.codec>): Category {
-        return new Category(json.id, json.name, json.description);
+        return new Category(json.id, json.name, json.description, json.ordinal);
     }
 }
