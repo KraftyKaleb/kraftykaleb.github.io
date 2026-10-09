@@ -34,7 +34,12 @@ final class SeedContentCommandTest extends WebTestCase {
             ['UND Platform', 'UND Work Well', 'UND Front-End Commons', 'UNDerground'],
             array_column($projects, 'name'),
         );
-        self::assertSame('professional', $projects[0]['category']);
+
+        $this->client->request('GET', '/api/categories', server: ['HTTP_ACCEPT' => 'application/json']);
+        self::assertResponseIsSuccessful();
+        $categories = json_decode((string) $this->client->getResponse()->getContent(), true);
+        self::assertSame(['Professional Projects', 'Side Projects', 'Other Projects'], array_column($categories, 'name'));
+        self::assertSame($categories[0]['id'], $projects[0]['category']['id']);
         self::assertSame(
             ['UND', 'TypeScript', 'CSS', 'PHP', 'Angular', 'Symfony', 'MariaDB'],
             array_column($projects[0]['tags'], 'name'),
@@ -52,6 +57,9 @@ final class SeedContentCommandTest extends WebTestCase {
 
         $this->client->request('GET', '/api/tags', server: ['HTTP_ACCEPT' => 'application/json']);
         self::assertCount(7, json_decode((string) $this->client->getResponse()->getContent(), true));
+
+        $this->client->request('GET', '/api/categories', server: ['HTTP_ACCEPT' => 'application/json']);
+        self::assertCount(3, json_decode((string) $this->client->getResponse()->getContent(), true));
     }
 
     private function seed(): void {

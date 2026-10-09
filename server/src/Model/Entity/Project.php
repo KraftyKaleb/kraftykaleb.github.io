@@ -47,9 +47,11 @@ class Project {
     #[Groups(['project:read', 'project:write'])]
     public string $description = '';
 
-    #[ORM\Column(length: 16, enumType: ProjectCategory::class)]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     #[Groups(['project:read', 'project:write'])]
-    public ProjectCategory $category = ProjectCategory::Other;
+    public ?Category $category = null;
 
     /** Display order on the projects page, lowest first. */
     #[ORM\Column]
