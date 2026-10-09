@@ -1,7 +1,9 @@
-import {Component, signal, Signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
+import {toSignal} from "@angular/core/rxjs-interop";
+import {catchError, of} from "rxjs";
 import {ProjectComponent} from "./project/project.component";
-import {Project} from "@app/model/project";
-import {Link} from "@app/model/link";
+import {Project, ProjectCategory} from "@app/model/project";
+import {ProjectService} from "@app/service/project.service";
 
 @Component({
     selector: 'app-projects',
@@ -13,54 +15,19 @@ import {Link} from "@app/model/link";
     styleUrl: './projects.component.css'
 })
 export class ProjectsComponent {
-    private readonly commonStack: string[] = [
-        'TypeScript',
-        'CSS',
-        'PHP',
-        'Angular',
-        'Symfony',
-        'MariaDB'
-    ]
+    private readonly projects = toSignal(
+        inject(ProjectService).getProjects().pipe(catchError(error => {
+            console.error('Could not load projects', error);
+            return of([]);
+        })),
+        {initialValue: []}
+    );
 
-    // TODO: Move these definitions to a blog-like backend.
-    protected professionalProjects: Signal<readonly Project[]> = signal<readonly Project[]>([
-        new Project(
-            'UND Platform',
-            'A monorepo-type project that consolidated several small apps, primarily forms utilizing abstraction to reduce redundancy and improve maintainability.',
-            [
-                'UND',
-                ...this.commonStack
-            ],
-            [new Link('Demo', 'https://apps.und.edu/uit/platform/client/public/', 'pi pi-external-link')]
-        ),
-        new Project(
-            'UND Work Well',
-            'A set of challenges "events" for employees to complete to stay healthy in the workplace.',
-            [
-                'UND',
-                ...this.commonStack
-            ],
-            [new Link('Demo', 'https://uitapps.und.edu/wel/work_well/client/public/', 'pi pi-external-link')]
-        ),
-        new Project(
-            'UND Front-End Commons',
-            'A library for common front',
-            [
-                'UND',
-                ...this.commonStack
-            ],
-            null
-        ),
-        new Project(
-            'UNDerground',
-            'A library for common front',
-            [
-                'UND',
-                ...this.commonStack
-            ],
-            null
-        ),
-    ]);
-    protected readonly sideProjects = signal<readonly Project[]>([]);
-    protected readonly otherProjects = signal<readonly Project[]>([]);
+    protected readonly professionalProjects = this.inCategory('professional');
+    protected readonly sideProjects = this.inCategory('side');
+    protected readonly otherProjects = this.inCategory('other');
+
+    private inCategory(category: ProjectCategory) {
+        return computed<readonly Project[]>(() => this.projects().filter(project => project.category === category));
+    }
 }

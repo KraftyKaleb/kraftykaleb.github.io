@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['tag:read']],
     denormalizationContext: ['groups' => ['tag:write']],
+    order: ['position' => 'ASC'],
 )]
 #[GetCollection]
 #[Get]
@@ -39,6 +40,11 @@ class Tag {
     #[Assert\Length(max: 64)]
     #[Groups(['tag:read', 'tag:write', 'project:read'])]
     public string $name = '';
+
+    /** Display order wherever tags are listed, lowest first. */
+    #[ORM\Column]
+    #[Groups(['tag:read', 'tag:write'])]
+    public int $position = 0;
 
     public function __construct() {
         $this->id = Uuid::v4()->toRfc4122();
