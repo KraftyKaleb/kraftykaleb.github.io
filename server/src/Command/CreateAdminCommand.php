@@ -31,9 +31,9 @@ final readonly class CreateAdminCommand {
             return $value;
         });
 
-        $adminRole = $this->entityManager->getRepository(Role::class)->findOneBy(['name' => Role::ADMIN]);
+        $adminRole = $this->entityManager->getRepository(Role::class)->findOneBy(['name' => 'ROLE_ADMIN']);
         if ($adminRole === null) {
-            $adminRole = new Role(Role::ADMIN);
+            $adminRole = new Role('ROLE_ADMIN');
             $this->entityManager->persist($adminRole);
         }
 

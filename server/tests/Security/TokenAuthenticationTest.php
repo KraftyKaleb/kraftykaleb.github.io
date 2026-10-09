@@ -26,7 +26,7 @@ final class TokenAuthenticationTest extends WebTestCase {
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 
-        $adminRole = new Role(Role::ADMIN);
+        $adminRole = new Role('ROLE_ADMIN');
         $this->entityManager->persist($adminRole);
         $this->createUser('admin')->roles->add($adminRole);
         $this->createUser('guest');

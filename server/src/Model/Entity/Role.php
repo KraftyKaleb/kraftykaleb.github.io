@@ -11,8 +11,6 @@ use Symfony\Component\Uid\Uuid;
  */
 #[ORM\Entity]
 class Role {
-    public const string ADMIN = 'ROLE_ADMIN';
-
     #[ORM\Id]
     #[ORM\Column(length: 36, options: ['fixed' => true])]
     public private(set) string $id;
