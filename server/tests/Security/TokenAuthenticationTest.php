@@ -36,7 +36,7 @@ final class TokenAuthenticationTest extends WebTestCase {
     public function testAdminCanLogInAndUseTheToken(): void {
         $token = $this->logIn('admin');
 
-        $this->client->request('GET', '/token', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token, 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', '/api/token', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token, 'HTTP_ACCEPT' => 'application/json']);
 
         self::assertResponseIsSuccessful();
         $current = json_decode((string) $this->client->getResponse()->getContent(), true);
@@ -53,16 +53,16 @@ final class TokenAuthenticationTest extends WebTestCase {
     public function testTokenRequiresTheAdminRole(): void {
         $token = $this->logIn('guest');
 
-        $this->client->request('GET', '/token', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
+        $this->client->request('GET', '/api/token', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
 
         self::assertResponseStatusCodeSame(403);
     }
 
     public function testMissingOrInvalidTokenIsRejected(): void {
-        $this->client->request('GET', '/token');
+        $this->client->request('GET', '/api/token');
         self::assertResponseStatusCodeSame(401);
 
-        $this->client->request('GET', '/token', server: ['HTTP_AUTHORIZATION' => 'Bearer not-a-token']);
+        $this->client->request('GET', '/api/token', server: ['HTTP_AUTHORIZATION' => 'Bearer not-a-token']);
         self::assertResponseStatusCodeSame(401);
     }
 
@@ -87,6 +87,6 @@ final class TokenAuthenticationTest extends WebTestCase {
     }
 
     private function putToken(string $username, string $password): void {
-        $this->client->jsonRequest('PUT', '/token', ['username' => $username, 'password' => $password]);
+        $this->client->jsonRequest('PUT', '/api/token', ['username' => $username, 'password' => $password]);
     }
 }

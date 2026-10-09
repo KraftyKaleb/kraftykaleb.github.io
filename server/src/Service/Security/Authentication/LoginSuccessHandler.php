@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Answers a successful PUT /token with a freshly issued access token.
+ * Answers a successful PUT /api/token with a freshly issued access token.
  */
 final readonly class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface {
     public function __construct(
