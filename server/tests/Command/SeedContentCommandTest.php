@@ -26,7 +26,7 @@ final class SeedContentCommandTest extends WebTestCase {
     public function testSeededProjectsArePubliclyReadableInOrder(): void {
         $this->seed();
 
-        $this->client->request('GET', '/projects', server: ['HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', '/api/projects', server: ['HTTP_ACCEPT' => 'application/json']);
 
         self::assertResponseIsSuccessful();
         $projects = json_decode((string) $this->client->getResponse()->getContent(), true);
@@ -47,10 +47,10 @@ final class SeedContentCommandTest extends WebTestCase {
         $this->seed();
         $this->seed();
 
-        $this->client->request('GET', '/projects', server: ['HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', '/api/projects', server: ['HTTP_ACCEPT' => 'application/json']);
         self::assertCount(4, json_decode((string) $this->client->getResponse()->getContent(), true));
 
-        $this->client->request('GET', '/tags', server: ['HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', '/api/tags', server: ['HTTP_ACCEPT' => 'application/json']);
         self::assertCount(7, json_decode((string) $this->client->getResponse()->getContent(), true));
     }
 
