@@ -6,6 +6,7 @@ namespace App\Service\Security\Authentication;
 use App\Model\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\Exception\InvalidTypeException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -23,7 +24,7 @@ final readonly class LoginSuccessHandler implements AuthenticationSuccessHandler
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): JsonResponse {
         $user = $token->getUser();
         if (!$user instanceof User) {
-            throw new \LogicException(sprintf('Expected "%s", got "%s".', User::class, get_debug_type($user)));
+            throw new InvalidTypeException(User::class, get_debug_type($user), 'user');
         }
 
         return JsonResponse::fromJsonString($this->serializer->serialize($this->tokens->issue($user), 'json'));
