@@ -1,0 +1,12 @@
+framework:
+    rate_limiter:
+        # Contact form submissions from one client IP
+        contact_per_client:
+            policy: sliding_window
+            limit: 5
+            interval: '1 hour'
+        # All contact form submissions together, a backstop if the per-client limit is dodged
+        contact_global:
+            policy: fixed_window
+            limit: 50
+            interval: '1 day'
