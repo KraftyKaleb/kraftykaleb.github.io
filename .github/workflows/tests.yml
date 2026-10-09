@@ -12,7 +12,8 @@ jobs:
         working-directory: server
     services:
       mariadb:
-        image: mariadb:11.4
+        # Docker Hub's mirror on GCR: runners often hit Docker Hub's anonymous pull limit.
+        image: mirror.gcr.io/library/mariadb:11.4
         env:
           MARIADB_ROOT_PASSWORD: ci
           # The test env appends "_test" to the database name (see doctrine.yaml).

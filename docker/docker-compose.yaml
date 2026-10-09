@@ -10,3 +10,9 @@ services:
       - "8008:80"
     volumes:
       - ../:/var/www/html
+      # Uploaded files live in a named volume, because every deploy wipes the app
+      # directory on the host.
+      - uploads:/var/www/html/server/var/uploads
+
+volumes:
+  uploads:

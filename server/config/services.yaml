@@ -9,6 +9,10 @@
 parameters:
     # ISO 8601 duration an access token issued by PUT /token stays valid for
     app.access_token_ttl: 'PT1H'
+    # Where uploaded files are kept. Outside public/ so they are only served through
+    # GET /api/uploads/{id}/content. In Docker this is a named volume (see
+    # docker/docker-compose.yaml), because deploys wipe the app directory.
+    app.upload_dir: '%kernel.project_dir%/var/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -23,3 +27,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@test:
+    parameters:
+        app.upload_dir: '%kernel.project_dir%/var/uploads_test'
