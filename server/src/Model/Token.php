@@ -13,8 +13,8 @@ use DateTimeImmutable;
 /**
  * A bearer access token. Not stored: tokens are self-contained PASETOs.
  *
- * PUT /token with {"username", "password"} is answered by the "login" firewall,
- * GET /token describes the token sent in the Authorization header.
+ * PUT /api/token with {"username", "password"} is answered by the "login" firewall,
+ * GET /api/token describes the token sent in the Authorization header.
  */
 #[Put(
     uriTemplate: '/token',

@@ -8,7 +8,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * The "login" firewall answers JSON requests to PUT /token before they get here,
+ * The "login" firewall answers JSON requests to PUT /api/token before they get here,
  * so only requests that were not sent as JSON reach this processor.
  *
  * @implements ProcessorInterface<mixed, never>

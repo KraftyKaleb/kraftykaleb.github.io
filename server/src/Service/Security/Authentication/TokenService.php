@@ -18,7 +18,7 @@ use ParagonIE\Paseto\Rules\ValidAt;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Issues and verifies the PASETO (v4.local) access tokens handed out by PUT /token.
+ * Issues and verifies the PASETO (v4.local) access tokens handed out by PUT /api/token.
  */
 final class TokenService {
     private const string ISSUER = 'kraftykaleb-admin-api';
